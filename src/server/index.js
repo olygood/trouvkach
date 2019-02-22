@@ -8,7 +8,8 @@
 
 import express from "express";
 import path from "path";
-
+import mongoose from "mongoose";
+import bodyparser from "body-parser";
 const {APP_PORT} = process.env;
 
 const app = express();
@@ -23,3 +24,19 @@ app.get("/hello", (req, res) => {
 app.listen(APP_PORT, () =>
     console.log(`🚀 Server is listening on port ${APP_PORT}.`),
 );
+app.use(bodyparser.json());
+mongoose
+    .connect(
+        `mongodb://dev:dev@mongo:27017/banks?authSource=admin`,
+
+        {
+            useNewUrlParser: true,
+        },
+    )
+    .then(() => {
+        console.log("CONNECTED TO BOOKSHELF TABLE");
+    })
+    .catch(e => {
+        console.log("ERROR ON DB CONNECTION");
+        console.log(e);
+    });
